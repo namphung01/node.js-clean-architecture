@@ -8,6 +8,7 @@ const PostsSchema = new Schema({
     unique: true
   },
   description: String,
+  content: String,
   createdAt: {
     type: 'Date',
     default: Date.now
@@ -24,6 +25,7 @@ const PostsSchema = new Schema({
 
 PostsSchema.index({ userId: 1, title: 1 });
 PostsSchema.index({ userId: 1, description: 1 });
+PostsSchema.index({ userId: 1, content: 1 });
 PostsSchema.index({ userId: 1, createdAt: 1 });
 PostsSchema.index({ userId: 1, isPublished: 1 });
 

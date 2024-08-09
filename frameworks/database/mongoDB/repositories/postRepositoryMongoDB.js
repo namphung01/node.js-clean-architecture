@@ -21,6 +21,7 @@ export default function postRepositoryMongoDB() {
     const newPost = new PostModel({
       title: postEntity.getTitle(),
       description: postEntity.getDescription(),
+      content: postEntity.getContent(),
       createdAt: new Date(),
       isPublished: postEntity.isPublished(),
       userId: postEntity.getUserId()

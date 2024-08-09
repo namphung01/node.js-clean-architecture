@@ -67,11 +67,12 @@ export default function postController(
   };
 
   const addNewPost = (req, res, next) => {
-    const { title, description } = req.body;
+    const { title, description, content } = req.body;
 
     addPost({
       title,
       description,
+      content,
       userId: req.user.id,
       postRepository: dbRepository
     })
