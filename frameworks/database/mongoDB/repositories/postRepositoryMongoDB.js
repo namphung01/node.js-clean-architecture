@@ -33,6 +33,7 @@ export default function postRepositoryMongoDB() {
   const updateById = (id, postEntity) => {
     const updatedPost = {
       title: postEntity.getTitle(),
+      content: postEntity.getContent(),
       description: postEntity.getDescription(),
       isPublished: postEntity.isPublished()
     };

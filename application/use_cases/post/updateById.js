@@ -3,6 +3,7 @@ import post from '../../../src/entities/post';
 export default function updateById({
   id,
   title,
+  content,
   description,
   createdAt,
   isPublished,
@@ -15,6 +16,7 @@ export default function updateById({
   }
   const updatedPost = post({
     title,
+    content,
     description,
     createdAt,
     isPublished,

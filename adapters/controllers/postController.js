@@ -105,11 +105,12 @@ export default function postController(postDbRepository, postDbRepositoryImpl) {
   };
 
   const updatePostById = (req, res, next) => {
-    const { title, description, isPublished } = req.body;
+    const { title, content, description, isPublished } = req.body;
 
     updateById({
       id: req.params.id,
       title,
+      content,
       description,
       userId: req.user.id,
       isPublished,

@@ -3,14 +3,16 @@ import mongoose from 'mongoose';
 import redis from 'redis';
 import config from './config/config';
 import expressConfig from './frameworks/webserver/express';
+// eslint-disable-next-line import/no-cycle
 import routes from './frameworks/webserver/routes';
 import serverConfig from './frameworks/webserver/server';
 import mongoDbConnection from './frameworks/database/mongoDB/connection';
 import redisConnection from './frameworks/database/redis/connection';
-// middlewares
 import errorHandlingMiddleware from './frameworks/webserver/middlewares/errorHandlingMiddleware';
 
 const app = express();
+
+// i18n config
 const path = require('path');
 const { I18n } = require('i18n');
 
@@ -21,10 +23,22 @@ const i18n = new I18n({
   header: 'accept-language' // Header mặc định để xác định ngôn ngữ
 });
 
+app.use(i18n.init);
+// end i18n config
+
 const server = require('http').createServer(app);
 
-app.use(i18n.init);
+const { swaggerUi, swaggerDocs } = require('./frameworks/services/swagger'); // Đường dẫn đến file cấu hình Swagger
 
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocs, {
+    swaggerOptions: {
+      persistAuthorization: true
+    }
+  })
+);
 // express.js configuration (middlewares etc.)
 expressConfig(app);
 
