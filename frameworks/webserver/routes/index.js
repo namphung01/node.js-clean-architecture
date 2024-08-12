@@ -1,5 +1,6 @@
 import postRouter from './post';
 import categoryRouter from './category';
+// eslint-disable-next-line import/no-cycle
 import userRouter from './user';
 import authRouter from './auth';
 
