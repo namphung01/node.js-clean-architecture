@@ -1,21 +1,15 @@
 import findAll from '../../application/use_cases/post/findAll';
-import countAll from '../../application/use_cases/post/countAll';
 import addPost from '../../application/use_cases/post/add';
 import findById from '../../application/use_cases/post/findById';
 import updateById from '../../application/use_cases/post/updateById';
 import deletePost from '../../application/use_cases/post/deleteΒyId';
+import ResponseService from '../../frameworks/webserver/middlewares/responseService';
 
 export default function postController(
   postDbRepository,
   postDbRepositoryImpl,
-  cachingClient,
-  postCachingRepository,
-  postCachingRepositoryImpl
 ) {
   const dbRepository = postDbRepository(postDbRepositoryImpl());
-  const cachingRepository = postCachingRepository(
-    postCachingRepositoryImpl()(cachingClient)
-  );
 
   // Fetch all the posts of the logged in user
   const fetchAllPosts = (req, res, next) => {
@@ -35,22 +29,26 @@ export default function postController(
     params.userId = req.user.id;
 
     findAll(params, dbRepository)
-      .then((posts) => {
-        response.posts = posts;
-        const cachingOptions = {
-          key: 'posts_',
-          expireTimeSec: 30,
-          data: JSON.stringify(posts)
-        };
-        // cache the result to redis
-        cachingRepository.setCache(cachingOptions);
-        return countAll(params, dbRepository);
-      })
+      // .then((posts) => {
+      //   response.posts = posts;
+      //   const cachingOptions = {
+      //     key: 'posts_',
+      //     expireTimeSec: 30,
+      //     data: JSON.stringify(posts)
+      //   };
+      //   // cache the result to redis
+      //   cachingRepository.setCache(cachingOptions);
+      //   return countAll(params, dbRepository);
+      // })
       .then((totalItems) => {
         response.totalItems = totalItems;
         response.totalPages = Math.ceil(totalItems / params.perPage);
         response.itemsPerPage = params.perPage;
-        return res.json(response);
+        return ResponseService.success(res, {
+          // eslint-disable-next-line no-underscore-dangle
+          message: res.__('success'),
+          data: response
+        });
       })
       .catch((error) => next(error));
   };
@@ -61,7 +59,11 @@ export default function postController(
         if (!post) {
           throw new Error(`No post found with id: ${req.params.id}`);
         }
-        res.json(post);
+        return ResponseService.success(res, {
+          // eslint-disable-next-line no-underscore-dangle
+          message: res.__('success'),
+          data: post
+        });
       })
       .catch((error) => next(error));
   };
@@ -76,22 +78,32 @@ export default function postController(
       userId: req.user.id,
       postRepository: dbRepository
     })
-      .then((post) => {
-        const cachingOptions = {
-          key: 'posts_',
-          expireTimeSec: 30,
-          data: JSON.stringify(post)
-        };
-        // cache the result to redis
-        cachingRepository.setCache(cachingOptions);
-        return res.json('post added');
-      })
+      .then((post) =>
+        // const cachingOptions = {
+        //   key: 'posts_',
+        //   expireTimeSec: 30,
+        //   data: JSON.stringify(post)
+        // };
+        // // cache the result to redis
+        // cachingRepository.setCache(cachingOptions);
+        // return res.json('post added');
+        ResponseService.success(res, {
+          // eslint-disable-next-line no-underscore-dangle
+          message: res.__('success'),
+          data: post
+        })
+      )
       .catch((error) => next(error));
   };
 
   const deletePostById = (req, res, next) => {
     deletePost(req.params.id, dbRepository)
-      .then(() => res.json('post sucessfully deleted!'))
+      .then(() =>
+        ResponseService.success(res, {
+          // eslint-disable-next-line no-underscore-dangle
+          message: res.__('success')
+        })
+      )
       .catch((error) => next(error));
   };
 
@@ -106,7 +118,13 @@ export default function postController(
       isPublished,
       postRepository: dbRepository
     })
-      .then((message) => res.json(message))
+      .then((post) =>
+        ResponseService.success(res, {
+          // eslint-disable-next-line no-underscore-dangle
+          message: res.__('success'),
+          data: post
+        })
+      )
       .catch((error) => next(error));
   };
 

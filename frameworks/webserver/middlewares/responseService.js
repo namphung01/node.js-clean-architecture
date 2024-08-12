@@ -1,8 +1,9 @@
 class ResponseService {
   static success(res, data) {
     res.status(200).json({
-      status: 'success',
-      data
+      status: 200,
+      message: data.message,
+      data: data.data
     });
   }
 

@@ -1,7 +1,7 @@
 import addUser from '../../application/use_cases/user/add';
 import findByProperty from '../../application/use_cases/user/findByProperty';
-import countAll from '../../application/use_cases/user/countAll';
 import findById from '../../application/use_cases/user/findById';
+import ResponseService from '../../frameworks/webserver/middlewares/responseService';
 
 export default function userController(
   userDbRepository,
@@ -27,22 +27,28 @@ export default function userController(
     params.perPage = params.perPage ? parseInt(params.perPage, 10) : 10;
 
     findByProperty(params, dbRepository)
-      .then((users) => {
-        response.users = users;
-        return countAll(params, dbRepository);
-      })
       .then((totalItems) => {
         response.totalItems = totalItems;
         response.totalPages = Math.ceil(totalItems / params.perPage);
         response.itemsPerPage = params.perPage;
-        return res.json(response);
+        return ResponseService.success(res, {
+          // eslint-disable-next-line no-underscore-dangle
+          message: res.__('success'),
+          data: response
+        });
       })
       .catch((error) => next(error));
   };
 
   const fetchUserById = (req, res, next) => {
     findById(req.params.id, dbRepository)
-      .then((user) => res.json(user))
+      .then((user) =>
+        ResponseService.success(res, {
+          // eslint-disable-next-line no-underscore-dangle
+          message: res.__('success'),
+          data: user
+        })
+      )
       .catch((error) => next(error));
   };
 
@@ -57,7 +63,13 @@ export default function userController(
       dbRepository,
       authService
     )
-      .then((user) => res.json(user))
+      .then((user) =>
+        ResponseService.success(res, {
+          // eslint-disable-next-line no-underscore-dangle
+          message: res.__('success'),
+          data: user
+        })
+      )
       .catch((error) => next(error));
   };
 
