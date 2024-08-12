@@ -11,7 +11,19 @@ import redisConnection from './frameworks/database/redis/connection';
 import errorHandlingMiddleware from './frameworks/webserver/middlewares/errorHandlingMiddleware';
 
 const app = express();
+const path = require('path');
+const { I18n } = require('i18n');
+
+const i18n = new I18n({
+  locales: ['en', 'vi'],
+  directory: path.join(__dirname, 'locales'),
+  defaultLocale: 'vi', // Ngôn ngữ mặc định
+  header: 'accept-language' // Header mặc định để xác định ngôn ngữ
+});
+
 const server = require('http').createServer(app);
+
+app.use(i18n.init);
 
 // express.js configuration (middlewares etc.)
 expressConfig(app);
@@ -24,9 +36,7 @@ mongoDbConnection(mongoose, config, {
   autoIndex: false,
   useCreateIndex: true,
   useNewUrlParser: true,
-  autoReconnect: true,
-  reconnectTries: Number.MAX_VALUE,
-  reconnectInterval: 10000,
+  useUnifiedTopology: true,
   keepAlive: 120,
   connectTimeoutMS: 1000
 }).connectToMongo();
