@@ -5,10 +5,7 @@ import updateById from '../../application/use_cases/post/updateById';
 import deletePost from '../../application/use_cases/post/deleteΒyId';
 import ResponseService from '../../frameworks/webserver/middlewares/responseService';
 
-export default function postController(
-  postDbRepository,
-  postDbRepositoryImpl,
-) {
+export default function postController(postDbRepository, postDbRepositoryImpl) {
   const dbRepository = postDbRepository(postDbRepositoryImpl());
 
   // Fetch all the posts of the logged in user
