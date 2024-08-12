@@ -2,7 +2,9 @@ export default {
   port: process.env.PORT || 1234,
   ip: process.env.HOST || '0.0.0.0',
   mongo: {
-    uri: process.env.MONGO_URL || 'mongodb://root:123123@172.16.10.30:27017/nodejs-clean-architecture?authSource=admin'
+    uri:
+      process.env.MONGO_URL ||
+      'mongodb://root:123123@172.16.10.7:27017/nodejs-clean-architecture?authSource=admin'
   },
   redis: {
     uri: process.env.REDIS_URL || 'redis://localhost:6379'
