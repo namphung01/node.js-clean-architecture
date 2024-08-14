@@ -10,7 +10,7 @@ export default function updateById({
 }) {
   // validate
   if (!title) {
-    throw new Error('title and description fields are mandatory');
+    throw new Error('title fields are mandatory');
   }
   const updatedCategory = category({
     title,

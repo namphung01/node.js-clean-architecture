@@ -1,9 +1,9 @@
-export default function categoryRepository(repository) {
+export default function walletRepository(repository) {
   const findAll = (params) => repository.findAll(params);
   const countAll = (params) => repository.countAll(params);
   const findById = (id) => repository.findById(id);
-  const add = (category) => repository.add(category);
-  const updateById = (id, category) => repository.updateById(id, category);
+  const add = (wallet) => repository.add(wallet);
+  const updateById = (id, wallet) => repository.updateById(id, wallet);
   const deleteById = (id) => repository.deleteById(id);
 
   return {

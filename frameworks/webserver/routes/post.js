@@ -1,8 +1,8 @@
 import postController from '../../../adapters/controllers/postController';
 import postDbRepository from '../../../application/repositories/postDbRepository';
 import postDbRepositoryMongoDB from '../../database/mongoDB/repositories/postRepositoryMongoDB';
-import postRedisRepository from '../../../application/repositories/postRedisRepository';
-import postRedisRepositoryImpl from '../../database/redis/postRepositoryRedis';
+// import postRedisRepository from '../../../application/repositories/postRedisRepository';
+// import postRedisRepositoryImpl from '../../database/redis/postRepositoryRedis';
 import redisCachingMiddleware from '../middlewares/redisCachingMiddleware';
 import authMiddleware from '../middlewares/authMiddleware';
 
@@ -12,10 +12,10 @@ export default function postRouter(express, redisClient) {
   // load controller with dependencies
   const controller = postController(
     postDbRepository,
-    postDbRepositoryMongoDB,
-    redisClient,
-    postRedisRepository,
-    postRedisRepositoryImpl
+    postDbRepositoryMongoDB
+    // redisClient,
+    // postRedisRepository,
+    // postRedisRepositoryImpl
   );
 
   // GET endpoints
