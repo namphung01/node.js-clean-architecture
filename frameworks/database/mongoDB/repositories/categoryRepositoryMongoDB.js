@@ -9,13 +9,15 @@ function omit(obj, ...props) {
 export default function categoryRepositoryMongoDB() {
   const findAll = (params) =>
     CategoryModel.find(omit(params, 'page', 'perPage'))
+      .populate('userId', 'username email')
       .skip(params.perPage * params.page - params.perPage)
       .limit(params.perPage);
 
   const countAll = (params) =>
     CategoryModel.countDocuments(omit(params, 'page', 'perPage'));
 
-  const findById = (id) => CategoryModel.findById(id);
+  const findById = (id) =>
+    CategoryModel.findById(id).populate('userId', 'username email');
 
   const add = (categoryEntity) => {
     const newCategory = new CategoryModel({
